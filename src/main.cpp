@@ -1,7 +1,8 @@
 #include <iostream>
-#include "include/file_manager.h"
-
+#include "file_manager.h"
 
 int main() { 
-    read_file();
+    FileManager file_m;
+
+    file_m.read_file();
 }

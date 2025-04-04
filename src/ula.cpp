@@ -1,14 +1,15 @@
-#include "include/ula.h"
+#include "ula.h"
 
 ULA::ULA(){
     PC = 0;
     IR = 0;
     vai_um = 0;
     saida = 0;
+    //N = 0;
+    //Z = 0;
 }
 
 void ULA::executa(byte inst){
-
     IR = inst;
     byte op = 0b00110000 & IR; // TODO: mudar a configuração dos bits quando usar todos os 8
     bool A = (IR >> 3) & 1;

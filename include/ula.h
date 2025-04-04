@@ -9,10 +9,11 @@ class ULA{
         ULA();
 
         void executa(byte inst); // Executa uma instrução
-        void log(); // Gera log
+        //void log(); // Gera log
 
     private:
         byte IR, PC; // Registradores
+        //byte N, Z;
         byte vai_um, saida; // Saída da ULA
 };
 

@@ -13,7 +13,7 @@ class ULA{
 
     private:
         byte IR, PC; // Registradores
-        byte vai_um, saida; // Saída da ULA
+        byte vai_um, saida, Z, N; // Saída da ULA
 };
 
 void print_byte(byte b);

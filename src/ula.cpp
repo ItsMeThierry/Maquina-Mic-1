@@ -53,7 +53,7 @@ void ULA::executa(byte inst){
     print_byte(vai_um);
     std::cout << std::endl;
 
-
+// teste
     PC += 1; 
 }
 

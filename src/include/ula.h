@@ -6,16 +6,20 @@
 
 class ULA{
     public:
-        byte IR, PC; // Registradores
-        byte vai_um, saida, N, Z; // Saída da ULA
+        byte IR, PC; // Registradores de 8 bits
+        bits_32 H, OPC; // Registradores de 32 bits
 
-        bool A, B, INVA, INC, AXOR, SSL8, SRA1; // Entrada da ULA 
+        bits_32 saida; // Saída da ULA em 32 bits
+        bool vai_um, N, Z; // Saída da ULA em 8 bits;
 
         ULA();
 
         void executa(byte inst); // Executa uma instrução
-};
+        void somador_completo(bits_32 a, bits_32 b); // Adiciona dois bits
 
-void print_byte(byte b);
+    private:
+        void print_binary(byte b); // Apenas pra debug
+        void print_binary(bits_32 b); // Apenas pra debug
+};
 
 #endif

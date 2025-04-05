@@ -8,8 +8,11 @@
 class FileManager{
     public:
         void read_file();
-        byte string_to_byte(std::string string);
-        std::string byte_to_string(byte b);
+        
+        bits_32 string_to_binary(std::string string);
+
+        std::string binary_to_string(byte b);
+        std::string binary_to_string(bits_32 b);
 };
 
 #endif

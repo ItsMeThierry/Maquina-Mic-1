@@ -27,22 +27,22 @@ void FileManager::read_file(){
     while (std::getline(file, string)) {
         log << "Ciclo " << c << std::endl;
 
-        if(string.length() > 8){
-            log << "[Erro] Numero de bits maior que o esperado\n";
+        if(string.length() != 8){
+            log << "[Erro] Numero de bits invalido\n";
             log << "============================================================\n";
             break;
         }
 
-        ula.executa(string_to_byte(string));
+        ula.executa(string_to_binary(string));
         
         log << "PC = " << int(ula.PC) << std::endl;
-        log << "IR = " << byte_to_string(ula.IR) << std::endl;
-        log << "A = " << byte_to_string(ula.A) << std::endl;
-        log << "B = " << byte_to_string(ula.B) << std::endl;
-        log << "INVA = " << byte_to_string(ula.INVA) << std::endl;
-        log << "INC = " << byte_to_string(ula.INC) << std::endl;
-        log << "SAIDA = " << byte_to_string(ula.saida) << std::endl;
-        log << "VAI_UM = " << byte_to_string(ula.vai_um) << std::endl;
+        log << "IR = " << binary_to_string(ula.IR) << std::endl;
+        log << "A = " << binary_to_string(ula.H) << std::endl;
+        log << "B = " << binary_to_string(ula.OPC) << std::endl;
+        log << "SAIDA = " << binary_to_string(ula.saida) << std::endl;
+        log << "N = " << ((ula.N) ? 1 : 0) << std::endl;
+        log << "Z = " << ((ula.Z) ? 1 : 0) << std::endl;
+        log << "VAI_UM = " << ((ula.vai_um) ? 1 : 0) << std::endl;
 
         log << "============================================================\n";
         c++;
@@ -54,8 +54,8 @@ void FileManager::read_file(){
     file.close();
 }
 
-byte FileManager::string_to_byte(std::string string){
-    byte result = 0;
+bits_32 FileManager::string_to_binary(std::string string){
+    bits_32 result = 0;
 
     for(int i = 0; i < 8; i++){
         result <<= 1;
@@ -68,10 +68,27 @@ byte FileManager::string_to_byte(std::string string){
     return result;
 }
 
-std::string FileManager::byte_to_string(byte b){
+std::string FileManager::binary_to_string(byte b){
     std::string out;
 
     for(int i = 7; i >= 0; i--){
+        int bit = (b >> i) & 1;
+
+        if(bit){
+            out += '1';
+            continue;
+        }
+
+        out += '0';
+    }
+
+    return out;
+}
+
+std::string FileManager::binary_to_string(bits_32 b){
+    std::string out;
+
+    for(int i = 31; i >= 0; i--){
         int bit = (b >> i) & 1;
 
         if(bit){

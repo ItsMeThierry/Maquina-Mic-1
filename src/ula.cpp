@@ -5,6 +5,8 @@ ULA::ULA(){
     IR = 0;
     vai_um = 0;
     saida = 0;
+    Z = 0;
+    N = 0;
 }
 
 void ULA::executa(byte inst){
@@ -16,6 +18,10 @@ void ULA::executa(byte inst){
     INVA = (IR >> 1) & 1;
     INC = IR & 1;
     AXOR = A ^ INVA;
+    SSL8 = (IR >> 7) & 1;
+    SRA1 = (IR >> 6) & 1;
+    
+    //print_byte(op);
 
     switch(op){
         case 0b00000000: // A AND B
@@ -34,6 +40,25 @@ void ULA::executa(byte inst){
             saida = (AXOR ^ B) | (B & INC);
             vai_um = INC | (AXOR & B);
             break;
+
+    }
+
+    
+    // TESTA O SSL8 E SRA1
+    if (op == 0b10000000){
+       saida = (saida >> 8);
+    
+    }else if(op == 0b01000000){
+
+        saida = (saida >> 1);
+    }
+
+    // SETA AS SAÍDAS Z E N
+    if (saida == 0b00000000){
+        Z = 1;
+    }
+    if (saida == '???'){
+        N = 1;
     }
 
     PC += 1; 

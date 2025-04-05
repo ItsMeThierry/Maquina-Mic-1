@@ -7,9 +7,9 @@
 class ULA{
     public:
         byte IR, PC; // Registradores
-        byte vai_um, saida; // Saída da ULA
+        byte vai_um, saida, N, Z; // Saída da ULA
 
-        bool A, B, INVA, INC, AXOR; // Entrada da ULA 
+        bool A, B, INVA, INC, AXOR, SSL8, SRA1; // Entrada da ULA 
 
         ULA();
 

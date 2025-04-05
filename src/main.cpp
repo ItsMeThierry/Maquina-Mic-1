@@ -3,5 +3,7 @@
 
 
 int main() { 
-    read_file();
+    FileManager f_manager;
+    
+    f_manager.read_file();
 }

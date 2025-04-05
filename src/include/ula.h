@@ -6,14 +6,14 @@
 
 class ULA{
     public:
+        byte IR, PC; // Registradores
+        byte vai_um, saida; // Saída da ULA
+
+        bool A, B, INVA, INC, AXOR; // Entrada da ULA 
+
         ULA();
 
         void executa(byte inst); // Executa uma instrução
-        void log(); // Gera log
-
-    private:
-        byte IR, PC; // Registradores
-        byte vai_um, saida; // Saída da ULA
 };
 
 void print_byte(byte b);

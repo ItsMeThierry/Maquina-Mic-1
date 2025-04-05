@@ -5,8 +5,11 @@
 #include <iostream>
 #include "data_types.h"
 
-void read_file();
-byte string_to_byte(std::string string);
-void print_byte(byte b);
+class FileManager{
+    public:
+        void read_file();
+        byte string_to_byte(std::string string);
+        std::string byte_to_string(byte b);
+};
 
 #endif

@@ -10,7 +10,7 @@ class ULA{
         bits_32 H, OPC, TOS, CPP, LV, SP, PC, MDR, MAR; // Registradores de 32 bits
 
         bits_32 saida, sd; // Saída da ULA em 32 bits
-        bool vai_um, N, Z; // Saída da ULA em 8 bits;
+        bool vai_um, N, Z; // Saída da ULA em 8 bits
 
         ULA();
 

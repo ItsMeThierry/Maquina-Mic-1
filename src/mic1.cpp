@@ -92,26 +92,41 @@ void MIC_1::somador_completo(bits_32 a, bits_32 b){
 bits_32 MIC_1::set_barramento_B(bits_21 inst){
     byte entrada = inst & 0b1111;
 
-    switch(entrada){
+   switch(entrada){
         case 0b0000:
             return MDR;
+            break;
         case 0b0001:
             return PC;
+            break;
         case 0b0010:
-            return MBR; //Alterar para preencher depois
+            if(MBR & 0x80){               
+                MBR = MBR | 0xFFFFFF00;      
+            }else{                         
+                MBR = MBR & 0xFF;
+            }
+            return MBR;
+            break;
         case 0b0011:
-            return MBRU; //Alterar para preencher depois
+            MBRU = MBRU & 0xFF;
+            
+            return MBRU;
+            break;
         case 0b0100:
             return SP;
+            break;
         case 0b0101:
             return LV;
+            break;
         case 0b0110:
             return CPP;
+            break;
         case 0b0111:
             return TOS;
             break;
         case 0b1000:
             return OPC;
+            break;
     }
 
     return 0;

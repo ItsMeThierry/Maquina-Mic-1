@@ -33,18 +33,26 @@ void FileManager::read_file(){
             break;
         }
 
-        ula.executa(string_to_binary(string));
-        
-        log << "PC = " << int(ula.PC) << std::endl;
-        log << "IR = " << binary_to_string(ula.IR) << std::endl;
-        log << "A = " << binary_to_string(ula.H) << std::endl;
-        log << "B = " << binary_to_string(ula.OPC) << std::endl;
-        log << "SAIDA = " << binary_to_string(ula.saida) << std::endl;
-        log << "N = " << ((ula.N) ? 1 : 0) << std::endl;
-        log << "Z = " << ((ula.Z) ? 1 : 0) << std::endl;
-        log << "VAI_UM = " << ((ula.vai_um) ? 1 : 0) << std::endl;
+        try{
+            ula.executa(string_to_binary(string));
+            
+            log << "PC = " << int(ula.PC) << std::endl;
+            log << "IR = " << binary_to_string(ula.IR) << std::endl;
+            log << "A = " << binary_to_string(ula.H) << std::endl;
+            log << "B = " << binary_to_string(ula.OPC) << std::endl;
+            log << "SAIDA = " << binary_to_string(ula.saida) << std::endl;
+            log << "SD = " << binary_to_string(ula.sd) << std::endl;
+            log << "N = " << ((ula.N) ? 1 : 0) << std::endl;
+            log << "Z = " << ((ula.Z) ? 1 : 0) << std::endl;
+            log << "VAI_UM = " << ((ula.vai_um) ? 1 : 0) << std::endl;
 
-        log << "============================================================\n";
+            log << "============================================================\n";
+        }catch(std::string e){
+            log << "PC = " << int(ula.PC) << std::endl;
+            log << "IR = " << binary_to_string(ula.IR) << std::endl;
+            log << e;
+        }
+
         c++;
     }
 

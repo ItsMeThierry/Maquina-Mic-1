@@ -9,7 +9,7 @@ class ULA{
         byte IR, PC; // Registradores de 8 bits
         bits_32 H, OPC; // Registradores de 32 bits
 
-        bits_32 saida; // Saída da ULA em 32 bits
+        bits_32 saida, sd; // Saída da ULA em 32 bits
         bool vai_um, N, Z; // Saída da ULA em 8 bits;
 
         ULA();

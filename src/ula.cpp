@@ -8,6 +8,7 @@ ULA::ULA(){
     IR = 0;
     vai_um = 0;
     saida = 0;
+    sd = 0;
     Z = 0;
     N = 0;
 }
@@ -43,34 +44,23 @@ void ULA::executa(byte inst){
             vai_um = 0;
 
             somador_completo(A, B);
-            // std::cout << "Normal: ";
-            // print_binary(saida);
+
             break;
     }
 
     if(INC){
         somador_completo(saida, 1);
-        // std::cout << "Incrementada: ";
-        // print_binary(saida);
     }
 
+    if(SSL8 && SRA1){
+        throw std::string("[Erro] Sinal de entrada inválido\n");
+    }
     
-    // TESTA O SSL8 E SRA1
-    // if (op == 0b10000000){
-    //    saida = (saida >> 8);
-    
-    // }else if(op == 0b01000000){
+    sd = (SSL8) ? (saida << 8) : 0;
+    sd = (SRA1) ? (saida >> 1) : 0;
 
-    //     saida = (saida >> 1);
-    // }
-
-    // // SETA AS SAÍDAS Z E N
-    // if (saida == 0b00000000){
-    //     Z = 1;
-    // }
-    // if (saida == '???'){
-    //     N = 1;
-    // }
+    Z = (saida == 0) ? 1 : 0;
+    N = (saida >> 31) & 1;
 
     PC += 1; 
 }

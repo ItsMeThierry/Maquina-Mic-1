@@ -1,5 +1,6 @@
 #include "include/file_manager.h"
-#include "include/ula.h"
+#include "include/mic1.h"
+#include <string>
 
 void FileManager::read_file(){
     std::ifstream file("files/input.txt");
@@ -17,7 +18,7 @@ void FileManager::read_file(){
     }
 
     std::string string;
-    ULA ula;
+    MIC_1 mic1;
 
     log << "Comeco do programa\n";
     log << "============================================================\n";
@@ -27,32 +28,60 @@ void FileManager::read_file(){
     while (std::getline(file, string)) {
         log << "Ciclo " << c << std::endl;
 
-        if(string.length() != 8){
+        if(string.length() != 21){
             log << "[Erro] Numero de bits invalido\n";
             log << "============================================================\n";
             break;
         }
 
         try{
-            ula.executa(string_to_binary(string));
-            
-            log << "PC = " << int(ula.PC) << std::endl;
-            log << "IR = " << binary_to_string(ula.IR) << std::endl;
-            log << "A = " << binary_to_string(ula.H) << std::endl;
-            log << "B = " << binary_to_string(ula.OPC) << std::endl;
-            log << "SAIDA = " << binary_to_string(ula.saida) << std::endl;
-            log << "SD = " << binary_to_string(ula.sd) << std::endl;
-            log << "N = " << ((ula.N) ? 1 : 0) << std::endl;
-            log << "Z = " << ((ula.Z) ? 1 : 0) << std::endl;
-            log << "VAI_UM = " << ((ula.vai_um) ? 1 : 0) << std::endl;
+            log << "IR = " << string << std::endl;
+
+            log << std::endl;
+
+            log << "> Registradores antes da operacao\n";
+            log << "MAR = " << binary_to_string(mic1.MAR) << std::endl;
+            log << "MDR = " << binary_to_string(mic1.MDR) << std::endl;
+            log << "PC = " << binary_to_string(mic1.PC) << std::endl;
+            log << "MBR = " << binary_to_string(mic1.MBR) << std::endl;
+            log << "SP = " << binary_to_string(mic1.SP) << std::endl;
+            log << "LV = " << binary_to_string(mic1.LV) << std::endl;
+            log << "CPP = " << binary_to_string(mic1.CPP) << std::endl;
+            log << "TOS = " << binary_to_string(mic1.TOS) << std::endl;
+            log << "OPC = " << binary_to_string(mic1.OPC) << std::endl;
+            log << "H = " << binary_to_string(mic1.H) << std::endl;
+
+            log << std::endl;
+
+            mic1.executa_ula(string_to_binary(string));
+
+            // log << "SAIDA = " << binary_to_string(mic1.saida) << std::endl;
+            // log << "SD = " << binary_to_string(mic1.sd) << std::endl;
+            // log << "N = " << ((mic1.N) ? 1 : 0) << std::endl;
+            // log << "Z = " << ((mic1.Z) ? 1 : 0) << std::endl;
+            // log << "VAI_UM = " << ((mic1.vai_um) ? 1 : 0) << std::endl;
+
+            log << std::endl;
+
+            log << "> Registradores depois da operacao\n";
+            log << "MAR = " << binary_to_string(mic1.MAR) << std::endl;
+            log << "MDR = " << binary_to_string(mic1.MDR) << std::endl;
+            log << "PC = " << binary_to_string(mic1.PC) << std::endl;
+            log << "MBR = " << binary_to_string(mic1.MBR) << std::endl;
+            log << "SP = " << binary_to_string(mic1.SP) << std::endl;
+            log << "LV = " << binary_to_string(mic1.LV) << std::endl;
+            log << "CPP = " << binary_to_string(mic1.CPP) << std::endl;
+            log << "TOS = " << binary_to_string(mic1.TOS) << std::endl;
+            log << "OPC = " << binary_to_string(mic1.OPC) << std::endl;
+            log << "H = " << binary_to_string(mic1.H) << std::endl;
 
             log << "============================================================\n";
         }catch(std::string e){
-            log << "PC = " << int(ula.PC) << std::endl;
-            log << "IR = " << binary_to_string(ula.IR) << std::endl;
+            log << "PC = " << int(mic1.PC) << std::endl;
+            log << "IR = " << binary_to_string(mic1.IR) << std::endl;
             log << e;
         }
-
+        
         c++;
     }
 
@@ -65,10 +94,10 @@ void FileManager::read_file(){
 bits_32 FileManager::string_to_binary(std::string string){
     bits_32 result = 0;
 
-    for(int i = 0; i < 8; i++){
+    for(char c : string){
         result <<= 1;
 
-        if(string[i] == '1'){
+        if(c == '1'){
             result |= 1;
         }
     }

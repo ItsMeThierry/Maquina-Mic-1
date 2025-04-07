@@ -9,6 +9,7 @@
 
 class FileManager{
     public:
+        std::string ler_instrucoes();
         std::vector<bits_32> ler_microinstrucoes();
         void ler_registradores(bits_32* dados);
         void ler_dados(bits_32* dados);

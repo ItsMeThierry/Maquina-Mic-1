@@ -8,7 +8,7 @@
 
 class Syntax{
     public:
-        void program(std::vector<token> &table);
+        std::vector<bits_32> program(std::vector<token> &table);
         void execute();
         void start();
 
@@ -16,6 +16,7 @@ class Syntax{
 
     private:
         std::vector<token> *table;
+        std::vector<bits_32> binaries;
         int i;
         int table_size;
 };

@@ -1,6 +1,6 @@
 #include "syntax.h"
 
-void Syntax::program(std::vector<token> &table){
+std::vector<bits_32> Syntax::program(std::vector<token> &table){
     table_size = table.size();
     this->table = &table;
 
@@ -14,6 +14,7 @@ void Syntax::program(std::vector<token> &table){
         throw "[ERRO] Sintaxe invalida no token " + table[i].content;
     }
     
+    return binaries;
 }
 
 void Syntax::execute(){
@@ -24,15 +25,14 @@ void Syntax::execute(){
             throw std::string("[ERRO] Nao ha um byte apos o BIPUSH!");
         }
 
-        // EXECUTA INSTRUÇÃO
         std::cout << "0x10" << std::endl;
         i++;
         execute();
     }
 
     if(get_current_token(i).content == "DUP"){
-        // EXECUTA INSTRUÇÃO
-        std::cout << "0x59" << std::endl;
+        binaries.push_back(0b00110101000001001000100); // MAR = SP = SP+1;
+        binaries.push_back(0b00010100000000010100111); // MDR = TOS; wr
         i++;
         execute();
     }
@@ -44,8 +44,7 @@ void Syntax::execute(){
             throw std::string("[ERRO] Nao ha um numero apos o ILOAD!");
         }
 
-        std::cout << "0x15" << std::endl;
-        // EXECUTA INSTRUÇÃO
+        // binaries.push_back(0b00000000000000000000000000000000);
         i++;
         execute();
     }

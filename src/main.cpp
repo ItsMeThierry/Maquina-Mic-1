@@ -1,6 +1,7 @@
 #include <iostream>
 #include "file_manager.h"
 #include "mic1.h"
+#include "compiler.h"
 
 std::string decode_c(bits_32 inst){
     bits_9 code = inst & 0b111111111000000;
@@ -48,15 +49,18 @@ std::string decode_b(bits_32 inst){
 
 int main() { 
     FileManager f_manager;
+    Compiler compiler;
     MIC_1 mic1;
 
     std::vector<bits_32> instrucoes;
 
     try{
+        std::string isa_inst = f_manager.ler_instrucoes();
+        instrucoes = compiler.check_line(isa_inst);
+
         bits_32 dados[8];
         bits_32 registradores[10];
 
-        instrucoes = f_manager.ler_microinstrucoes();
         f_manager.ler_dados(dados);
         f_manager.ler_registradores(registradores);
         f_manager.create_log_file();
@@ -72,6 +76,7 @@ int main() {
     f_manager.print_log("=====================================================\n");
 
     int c = 1;
+
     for(bits_32 inst : instrucoes){
         f_manager.print_log("Ciclo " + std::to_string(c) + "\n");
         f_manager.print_log("IR = " + f_manager.binary_to_string(inst, 23) + "\n\n");

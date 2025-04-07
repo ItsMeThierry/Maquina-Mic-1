@@ -1,16 +1,17 @@
-#ifndef INTERPRETER_H
-#define INTERPRETER_H
+#ifndef COMPILER_H
+#define COMPILER_H
 
 #include <iostream>
 #include <vector>
 #include "lexic.h"
 #include "syntax.h"
+#include "data_types.h"
 
-class Interpreter{
+class Compiler{
     public:
-        Interpreter();
+        Compiler();
 
-        void check_line(std::string line);
+        std::vector<bits_32> check_line(std::string line);
     
     private:
         Lexic lexic;

@@ -1,5 +1,26 @@
 #include "file_manager.h"
 
+std::string FileManager::ler_instrucoes(){
+    std::ifstream file("files/input.txt");
+
+    if(!file.is_open()){
+        throw std::string("[Erro] Nao foi possivel abrir o input.txt");
+    }
+
+    std::string string;
+    std::string aux;
+
+    while(!file.eof()){
+        file >> aux;
+        string += aux;
+        string += '\n';
+    }
+
+    file.close();
+
+    return string;
+}
+
 std::vector<bits_32> FileManager::ler_microinstrucoes(){
     std::ifstream file("files/input.txt");
 

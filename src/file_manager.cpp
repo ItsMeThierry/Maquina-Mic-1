@@ -14,7 +14,7 @@ std::vector<bits_32> FileManager::ler_microinstrucoes(){
 
     while (std::getline(file, string)) {
         if(string.length() != 23){
-            throw "[Erro] Numero de bits invalido na linha " + std::to_string(c);
+            throw "[Erro] Em input.txt, o numero de bits esta invalido na linha " + std::to_string(c);
         }
 
         inst.push_back(string_to_binary(string));
@@ -25,6 +25,47 @@ std::vector<bits_32> FileManager::ler_microinstrucoes(){
     file.close();
 
     return inst;
+}
+
+void FileManager::ler_dados(bits_32* dados){
+    std::ifstream file("files/dados.txt");
+
+    if(!file.is_open()){
+        throw std::string("[Erro] Nao foi possivel abrir o dados.txt");
+    }
+
+    std::string string;
+    int c = 0;
+
+    while (std::getline(file, string)) {
+        if(c == 8){
+            throw std::string("[Erro] Ha mais dados do que o necessario no arquivo dados.txt");
+        }
+
+        if(string.length() != 32){
+            throw "[Erro] Em dados.txt, o numero de bits esta invalido na linha " + std::to_string(c+1);
+        }
+
+        dados[c] = string_to_binary(string);
+    
+        c++;
+    }
+
+    file.close();
+}
+
+void FileManager::escrever_dados(bits_32* dados){
+    std::ofstream file("files/dados.txt");
+
+    if(!file.is_open()){
+        throw std::string("[Erro] Nao foi possivel abrir o dados.txt");
+    }
+
+    for(int i = 0; i < 8; i++){
+        file << binary_to_string(dados[i]) << std::endl;
+    }
+
+    file.close();
 }
 
 void FileManager::create_log_file(){

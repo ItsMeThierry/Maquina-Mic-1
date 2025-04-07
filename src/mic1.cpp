@@ -7,16 +7,16 @@ MIC_1::MIC_1(){
     sd = 0;
     Z = 0;
     N = 0;
-    MBR = 0b10000001;
-    H = 1;
+    MBR = 0;
+    H = 0;
     OPC = 0;
     TOS = 0;
     CPP = 0;
     LV = 0;
-    SP = 0;
+    SP = 4;
     PC = 0;
     MDR = 0;
-    MAR = 0;
+    MAR = 4;
 }
 
 void MIC_1::executa_ula(bits_32 inst){
@@ -58,7 +58,7 @@ void MIC_1::executa_ula(bits_32 inst){
     }
 
     if(SSL8 && SRA1){
-        throw std::string("[Erro] Sinal de entrada inválido");
+        throw std::string("[Erro] Sinal de entrada SSL8/SRA1 inválido");
     }
 
     sd = (SSL8) ? (saida << 8) : 0;
@@ -72,6 +72,23 @@ void MIC_1::executa_ula(bits_32 inst){
  
     Z = (saida == 0) ? 1 : 0;
     N = (saida >> 31) & 1;
+}
+
+void MIC_1::read_or_write(bits_32 inst, bits_32* dados){
+    bool R = (inst >> 4) & 1;
+    bool W = (inst >> 5) & 1;
+
+    if(R && W){
+        throw std::string("[Erro] Sinal de entrada R/W inválido");
+    }
+
+    if(R){
+        MDR = dados[MAR];
+    }
+
+    if(W){
+        dados[MAR] = MDR;
+    }
 }
 
 void MIC_1::somador_completo(bits_32 a, bits_32 b){

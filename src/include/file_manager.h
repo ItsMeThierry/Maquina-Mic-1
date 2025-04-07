@@ -10,6 +10,9 @@
 class FileManager{
     public:
         std::vector<bits_32> ler_microinstrucoes();
+        void ler_dados(bits_32* dados);
+        void escrever_dados(bits_32* dados);
+
         void create_log_file();
         void close_log_file();
         void print_log(std::string line);

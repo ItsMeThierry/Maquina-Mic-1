@@ -1,22 +1,29 @@
 #include "include/mic1.h"
 
-MIC_1::MIC_1(){
+void MIC_1::setup(bits_32* memoria, bits_32* registradores){
+    for(int i = 0; i < 8; i++){
+        this->memoria[i] = memoria[i];
+    }
+
     IR = 0;
-    vai_um = 0;
+    MBR = 0;
+
+    MAR = registradores[0];
+    MDR = registradores[1];
+    PC = registradores[2];
+    MBR = registradores[3];
+    SP = registradores[4];
+    LV = registradores[5];
+    CPP = registradores[6];
+    TOS = registradores[7];
+    OPC = registradores[8];
+    H = registradores[9];
+
     saida = 0;
     sd = 0;
-    Z = 0;
+    vai_um = 0;
     N = 0;
-    MBR = 0;
-    H = 0;
-    OPC = 0;
-    TOS = 0;
-    CPP = 0;
-    LV = 0;
-    SP = 4;
-    PC = 0;
-    MDR = 0;
-    MAR = 4;
+    Z = 0;
 }
 
 void MIC_1::executa_ula(bits_32 inst){
@@ -74,7 +81,7 @@ void MIC_1::executa_ula(bits_32 inst){
     N = (saida >> 31) & 1;
 }
 
-void MIC_1::read_or_write(bits_32 inst, bits_32* dados){
+void MIC_1::read_or_write(bits_32 inst){
     bool R = (inst >> 4) & 1;
     bool W = (inst >> 5) & 1;
 
@@ -83,11 +90,11 @@ void MIC_1::read_or_write(bits_32 inst, bits_32* dados){
     }
 
     if(R){
-        MDR = dados[MAR];
+        MDR = memoria[MAR];
     }
 
     if(W){
-        dados[MAR] = MDR;
+        memoria[MAR] = MDR;
     }
 }
 
@@ -106,13 +113,11 @@ void MIC_1::somador_completo(bits_32 a, bits_32 b){
 bits_32 MIC_1::set_barramento_B(bits_21 inst){
     bits_8 entrada = inst & 0b1111;
 
-   switch(entrada){
+    switch(entrada){
         case 0b0000:
             return MDR;
-            break;
         case 0b0001:
             return PC;
-            break;
         case 0b0010:
             bits_32 extendido;
             
@@ -121,25 +126,18 @@ bits_32 MIC_1::set_barramento_B(bits_21 inst){
             }
 
             return extendido | MBR;
-            break;
         case 0b0011:
             return MBR;
-            break;
         case 0b0100:
             return SP;
-            break;
         case 0b0101:
             return LV;
-            break;
         case 0b0110:
             return CPP;
-            break;
         case 0b0111:
             return TOS;
-            break;
         case 0b1000:
             return OPC;
-            break;
     }
 
     return 0;
@@ -157,6 +155,7 @@ void MIC_1::set_barramento_C(bits_21 inst, bits_32 dados){
     PC = ((entrada >> 8) & 1) ? dados : PC;
     MDR = ((entrada >> 7) & 1) ? dados : MDR;
     MAR = ((entrada >> 6) & 1) ? dados : MAR;
+    
 }
 
 void MIC_1::print_binary(bits_8 b){

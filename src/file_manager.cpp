@@ -27,6 +27,37 @@ std::vector<bits_32> FileManager::ler_microinstrucoes(){
     return inst;
 }
 
+void FileManager::ler_registradores(bits_32* dados){
+    std::ifstream file("files/registradores.txt");
+
+    if(!file.is_open()){
+        throw std::string("[Erro] Nao foi possivel abrir o registradores.txt");
+    }
+
+    std::string string;
+
+    for(int i = 0; i < 10; i++){
+        if(!getline(file, string)){
+            throw std::string("[Erro] Registradores insuficientes!");
+        }
+
+        size_t pos = string.find('=');
+
+        if(pos == std::string::npos){
+            throw std::string("[Erro] Registradores invalidos!");
+        }
+
+        std::string input = string.substr(pos + 2);
+
+        if(input.length() != ((i == 3) ? 8 : 32)){
+            throw "[Erro] Em registradores.txt, o numero de bits esta invalido na linha " + std::to_string(i+1);
+        }
+        
+        dados[i] = string_to_binary(input);
+    }
+
+}
+
 void FileManager::ler_dados(bits_32* dados){
     std::ifstream file("files/dados.txt");
 

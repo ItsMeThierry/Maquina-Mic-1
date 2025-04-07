@@ -7,17 +7,16 @@ MIC_1::MIC_1(){
     sd = 0;
     Z = 0;
     N = 0;
-    MBR = 0;
-    H = 2;
-    OPC = 4;
-    TOS = 3;
+    MBR = 0b10000001;
+    H = 1;
+    OPC = 0;
+    TOS = 2;
     CPP = 0;
     LV = 0;
     SP = 0;
     PC = 0;
     MDR = 0;
     MAR = 0;
-    MBRU = 0;
 }
 
 void MIC_1::executa_ula(bits_32 inst){
@@ -100,17 +99,16 @@ bits_32 MIC_1::set_barramento_B(bits_21 inst){
             return PC;
             break;
         case 0b0010:
-            if(MBR & 0x80){               
-                MBR = MBR | 0xFFFFFF00;      
-            }else{                         
-                MBR = MBR & 0xFF;
+            bits_32 extendido;
+            
+            if((MBR >> 7) & 1){               
+                extendido = 0xFFFFFF00;      
             }
-            return MBR;
+
+            return extendido | MBR;
             break;
         case 0b0011:
-            MBRU = MBRU & 0xFF;
-            
-            return MBRU;
+            return MBR;
             break;
         case 0b0100:
             return SP;

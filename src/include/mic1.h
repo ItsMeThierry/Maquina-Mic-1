@@ -6,7 +6,7 @@
 
 class MIC_1{
     public:
-        byte MBR, MBRU; //Registradores de 8 bits
+        byte MBR; //Registradores de 8 bits
         bits_32 IR, H, OPC, TOS, CPP, LV, SP, PC, MDR, MAR; // Registradores de 32 bits
 
         bits_32 saida, sd; // Saída da ULA em 32 bits

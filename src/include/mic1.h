@@ -6,7 +6,7 @@
 
 class MIC_1{
     public:
-        byte MBR; //Registradores de 8 bits
+    bits_8 MBR; //Registradores de 8 bits
         bits_32 IR, H, OPC, TOS, CPP, LV, SP, PC, MDR, MAR; // Registradores de 32 bits
 
         bits_32 saida, sd; // Saída da ULA em 32 bits
@@ -20,7 +20,7 @@ class MIC_1{
         void set_barramento_C(bits_21 entrada, bits_32 saida); //Seleciona os registradores para o barramento C
 
     private:
-        void print_binary(byte b); // Apenas pra debug
+        void print_binary(bits_8 b); // Apenas pra debug
         void print_binary(bits_32 b); // Apenas pra debug
 };
 

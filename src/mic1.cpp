@@ -10,7 +10,7 @@ MIC_1::MIC_1(){
     MBR = 0b10000001;
     H = 1;
     OPC = 0;
-    TOS = 2;
+    TOS = 0;
     CPP = 0;
     LV = 0;
     SP = 0;
@@ -22,13 +22,13 @@ MIC_1::MIC_1(){
 void MIC_1::executa_ula(bits_32 inst){
 
     IR = inst;
-    byte op = 0b00110000 & (IR >> 13);
-    bool SSL8 = (IR >> 20) & 1;
-    bool SRA1 = (IR >> 19) & 1;
-    bool ENA = (IR >> 16) & 1;
-    bool ENB = (IR >> 15) & 1;
-    bool INVA = (IR >> 14) & 1;
-    bool INC = (IR >> 13) & 1;
+    bool SSL8 = (IR >> 22) & 1;
+    bool SRA1 = (IR >> 21) & 1;
+    bits_8 op = 0b00110000 & (IR >> 15);
+    bool ENA = (IR >> 18) & 1;
+    bool ENB = (IR >> 17) & 1;
+    bool INVA = (IR >> 16) & 1;
+    bool INC = (IR >> 15) & 1;
 
     bits_32 A = ((ENA) ? H : 0) ^ ((INVA) ? 0xFFFFFFFF : 0);
     bits_32 B = (ENB) ? set_barramento_B(IR) : 0;
@@ -58,7 +58,7 @@ void MIC_1::executa_ula(bits_32 inst){
     }
 
     if(SSL8 && SRA1){
-        throw std::string("[Erro] Sinal de entrada inválido\n");
+        throw std::string("[Erro] Sinal de entrada inválido");
     }
 
     sd = (SSL8) ? (saida << 8) : 0;
@@ -83,13 +83,11 @@ void MIC_1::somador_completo(bits_32 a, bits_32 b){
 
         saida |= (opA ^ opB ^ vai_um) << i;
         vai_um = (opA & opB) | ((opA ^ opB) & vai_um);
-        // print_binary(saida);
-        // std::cout << "VAIUM  " << vai_um << std::endl;
     }
 }
 
 bits_32 MIC_1::set_barramento_B(bits_21 inst){
-    byte entrada = inst & 0b1111;
+    bits_8 entrada = inst & 0b1111;
 
    switch(entrada){
         case 0b0000:
@@ -131,25 +129,26 @@ bits_32 MIC_1::set_barramento_B(bits_21 inst){
 }
 
 void MIC_1::set_barramento_C(bits_21 inst, bits_32 dados){
-    bits_9 entrada = inst & 0b000000001111111110000;
+    bits_9 entrada = inst & 0b111111111000000;
 
-    H = ((entrada >> 12) & 1) ? dados : H;
-    OPC = ((entrada >> 11) & 1) ? dados : OPC;
-    TOS = ((entrada >> 10) & 1) ? dados : TOS;
-    CPP = ((entrada >> 9) & 1) ? dados : CPP;
-    LV = ((entrada >> 8) & 1) ? dados : LV;
-    SP = ((entrada >> 7) & 1) ? dados : SP;
-    PC = ((entrada >> 6) & 1) ? dados : PC;
-    MDR = ((entrada >> 5) & 1) ? dados : MDR;
-    MAR = ((entrada >> 4) & 1) ? dados : MAR;
-
+    H = ((entrada >> 14) & 1) ? dados : H;
+    OPC = ((entrada >> 13) & 1) ? dados : OPC;
+    TOS = ((entrada >> 12) & 1) ? dados : TOS;
+    CPP = ((entrada >> 11) & 1) ? dados : CPP;
+    LV = ((entrada >> 10) & 1) ? dados : LV;
+    SP = ((entrada >> 9) & 1) ? dados : SP;
+    PC = ((entrada >> 8) & 1) ? dados : PC;
+    MDR = ((entrada >> 7) & 1) ? dados : MDR;
+    MAR = ((entrada >> 6) & 1) ? dados : MAR;
 }
 
-void MIC_1::print_binary(byte b){
+void MIC_1::print_binary(bits_8 b){
     for(int i = 7; i >= 0; i--){
         int bit = (b >> i) & 1;
         std::cout << bit;
     }
+
+    std::cout << std::endl;
 }
 
 void MIC_1::print_binary(bits_32 b){

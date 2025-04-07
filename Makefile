@@ -1,9 +1,8 @@
-CXX = g++
-CXXFLAGS = -Wall -Wextra -Isrc/include
-
 SRC_DIR = src
 BUILD_DIR = build
-INCLUDE_DIR = src/include
+
+CXX = g++
+CXXFLAGS = -Wall -Wextra -Iinclude
 
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRCS))

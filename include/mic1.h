@@ -1,5 +1,5 @@
-#ifndef ULA_H
-#define ULA_H
+#ifndef MIC1_H
+#define MIC1_H
 
 #include "data_types.h"
 #include <iostream>

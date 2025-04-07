@@ -1,6 +1,6 @@
 #include <iostream>
-#include "include/file_manager.h"
-#include "include/mic1.h"
+#include "file_manager.h"
+#include "mic1.h"
 
 std::string decode_c(bits_32 inst){
     bits_9 code = inst & 0b111111111000000;

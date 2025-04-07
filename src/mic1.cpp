@@ -1,4 +1,4 @@
-#include "include/mic1.h"
+#include "mic1.h"
 
 void MIC_1::setup(bits_32* memoria, bits_32* registradores){
     for(int i = 0; i < 8; i++){

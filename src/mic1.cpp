@@ -81,6 +81,10 @@ void MIC_1::read_or_write(bits_32 inst){
     bool R = (inst >> 4) & 1;
     bool W = (inst >> 5) & 1;
 
+    if(MAR >= 8){
+        throw std::string("[Erro] MAR excede o valor da memória");
+    }
+
     if(R){
         MDR = memoria[MAR];
     }

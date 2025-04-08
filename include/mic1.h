@@ -18,9 +18,10 @@ class MIC_1{
 
         void executa_ula(bits_32 inst); // Executa uma instrução
         void read_or_write(bits_32 inst); // Executa as operações de leitura ou escrita na memória
+        void fetch(bits_32 inst);
         void somador_completo(bits_32 a, bits_32 b); // Adiciona dois bits
         bits_32 set_barramento_B(bits_21 entrada); // Seleciona o registrador para o barramento B
-        void set_barramento_C(bits_21 entrada, bits_32 saida); //Seleciona os registradores para o barramento C
+        void set_barramento_C(bits_21 entrada); //Seleciona os registradores para o barramento C
 
     private:
         void print_binary(bits_8 b); // Apenas pra debug

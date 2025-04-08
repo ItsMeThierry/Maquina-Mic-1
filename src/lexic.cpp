@@ -1,9 +1,6 @@
 #include "lexic.h"
 
 void Lexic::transition(char c){
-    // std::cout << symbol << std::endl;
-    // std::cout << state << std::endl;
-    // std::cout << c << std::endl;
 
     switch(state){
         case 0:
@@ -132,6 +129,4 @@ void Lexic::end(){
             insert_token("NUMBER");
             break;
     }
-
-    // print_table();
 }

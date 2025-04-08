@@ -13,7 +13,7 @@ std::vector<bits_32> Syntax::program(std::vector<token> &table){
     if(i < table_size){
         throw "[ERRO] Sintaxe invalida no token " + table[i].content;
     }
-    
+
     return binaries;
 }
 
@@ -25,7 +25,12 @@ void Syntax::execute(){
             throw std::string("[ERRO] Nao ha um byte apos o BIPUSH!");
         }
 
-        std::cout << "0x10" << std::endl;
+        binaries.push_back(0b00110101000001001000100); // SP = MAR = SP+1
+
+        std::string s = get_current_token(i).content + "000000000110000";
+        binaries.push_back(string_to_binary(s)); // fetch
+
+        binaries.push_back(0b00011000001000010100000); // MDR = TOS = H; wr
         i++;
         execute();
     }
@@ -44,7 +49,17 @@ void Syntax::execute(){
             throw std::string("[ERRO] Nao ha um numero apos o ILOAD!");
         }
 
-        // binaries.push_back(0b00000000000000000000000000000000);
+        int num = std::stoi(get_current_token(i).content);
+
+        binaries.push_back(0b00010100100000000000101); // H = LV
+        
+        for(int i = 0; i < num; i++){
+            binaries.push_back(0b00111001100000000000000); // H = H+1   essa executa x vezes
+        }
+
+        binaries.push_back(0b00011000000000001010000); // MAR = H; rd
+        binaries.push_back(0b00110101000001001100100); // MAR = SP = SP+1; wr
+        binaries.push_back(0b00010100001000000000000); // TOS = MDR
         i++;
         execute();
     }

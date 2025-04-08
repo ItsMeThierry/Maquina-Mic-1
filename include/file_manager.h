@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "data_types.h"
+#include "binary_manipulator.h"
 
 class FileManager{
     public:
@@ -18,12 +19,6 @@ class FileManager{
         void create_log_file();
         void close_log_file();
         void print_log(std::string line);
-
-        bits_32 string_to_binary(std::string string);
-
-        std::string binary_to_string(bits_8 b);
-        std::string binary_to_string(bits_32 b);
-        std::string binary_to_string(bits_32 b, int size);
 
     private:
         std::ofstream log;

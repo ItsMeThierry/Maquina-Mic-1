@@ -5,6 +5,7 @@
 #include <iostream>
 #include "data_types.h"
 #include "structs.h"
+#include "binary_manipulator.h"
 
 class Syntax{
     public:

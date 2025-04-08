@@ -68,14 +68,10 @@ void MIC_1::executa_ula(bits_32 inst){
         throw std::string("[Erro] Sinal de entrada SSL8/SRA1 inválido");
     }
 
-    sd = (SSL8) ? (saida << 8) : 0;
-    sd = (SRA1) ? (saida >> 1) : 0;
+    sd = (SSL8) ? (saida << 8) : saida;
+    sd = (SRA1) ? (saida >> 1) : saida;
 
-    if(sd != 0){
-        set_barramento_C(IR, sd);
-    } else{
-        set_barramento_C(IR, saida);
-    }
+    set_barramento_C(IR);
  
     Z = (saida == 0) ? 1 : 0;
     N = (saida >> 31) & 1;
@@ -85,10 +81,6 @@ void MIC_1::read_or_write(bits_32 inst){
     bool R = (inst >> 4) & 1;
     bool W = (inst >> 5) & 1;
 
-    if(R && W){
-        throw std::string("[Erro] Sinal de entrada R/W inválido");
-    }
-
     if(R){
         MDR = memoria[MAR];
     }
@@ -96,6 +88,13 @@ void MIC_1::read_or_write(bits_32 inst){
     if(W){
         memoria[MAR] = MDR;
     }
+}
+
+void MIC_1::fetch(bits_32 inst){
+    bits_8 input = (inst >> 15);
+
+    MBR = input;
+    H = MBR;
 }
 
 void MIC_1::somador_completo(bits_32 a, bits_32 b){
@@ -143,18 +142,18 @@ bits_32 MIC_1::set_barramento_B(bits_21 inst){
     return 0;
 }
 
-void MIC_1::set_barramento_C(bits_21 inst, bits_32 dados){
+void MIC_1::set_barramento_C(bits_21 inst){
     bits_9 entrada = inst & 0b111111111000000;
 
-    H = ((entrada >> 14) & 1) ? dados : H;
-    OPC = ((entrada >> 13) & 1) ? dados : OPC;
-    TOS = ((entrada >> 12) & 1) ? dados : TOS;
-    CPP = ((entrada >> 11) & 1) ? dados : CPP;
-    LV = ((entrada >> 10) & 1) ? dados : LV;
-    SP = ((entrada >> 9) & 1) ? dados : SP;
-    PC = ((entrada >> 8) & 1) ? dados : PC;
-    MDR = ((entrada >> 7) & 1) ? dados : MDR;
-    MAR = ((entrada >> 6) & 1) ? dados : MAR;
+    H = ((entrada >> 14) & 1) ? sd : H;
+    OPC = ((entrada >> 13) & 1) ? sd : OPC;
+    TOS = ((entrada >> 12) & 1) ? sd : TOS;
+    CPP = ((entrada >> 11) & 1) ? sd : CPP;
+    LV = ((entrada >> 10) & 1) ? sd : LV;
+    SP = ((entrada >> 9) & 1) ? sd : SP;
+    PC = ((entrada >> 8) & 1) ? sd : PC;
+    MDR = ((entrada >> 7) & 1) ? sd : MDR;
+    MAR = ((entrada >> 6) & 1) ? sd : MAR;
     
 }
 

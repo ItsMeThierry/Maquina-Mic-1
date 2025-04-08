@@ -2,6 +2,7 @@
 #include "file_manager.h"
 #include "mic1.h"
 #include "compiler.h"
+#include "binary_manipulator.h"
 
 std::string decode_c(bits_32 inst){
     bits_9 code = inst & 0b111111111000000;
@@ -47,7 +48,24 @@ std::string decode_b(bits_32 inst){
     }
 }
 
-int main() { 
+std::string decode_op(bits_32 inst){
+    bits_8 op = 0b00110000 & (inst >> 15);
+
+    switch(op){
+        case 0b00000000:
+            return "AND";
+        case 0b00010000:
+            return "OR";
+        case 0b00100000:
+            return "NOT";
+        case 0b00110000:
+            return "+";
+        default:
+            return "X";
+    }
+}
+
+int main() {
     FileManager f_manager;
     Compiler compiler;
     MIC_1 mic1;
@@ -79,47 +97,54 @@ int main() {
 
     for(bits_32 inst : instrucoes){
         f_manager.print_log("Ciclo " + std::to_string(c) + "\n");
-        f_manager.print_log("IR = " + f_manager.binary_to_string(inst, 23) + "\n\n");
+        f_manager.print_log("IR = " + binary_to_string(inst, 23) + "\n\n");
 
         f_manager.print_log("BAR_B : " + decode_b(inst) + '\n');
-        f_manager.print_log("BAR_C : " + decode_c(inst) + "\n\n");
+        f_manager.print_log("BAR_C : " + decode_c(inst) + '\n');
+        f_manager.print_log("OP : " + decode_op(inst) + "\n\n");
 
         f_manager.print_log("> Registradores antes da instrucao\n");
-        f_manager.print_log("MAR = " + f_manager.binary_to_string(mic1.MAR) + "\n");
-        f_manager.print_log("MDR = " + f_manager.binary_to_string(mic1.MDR) + "\n");
-        f_manager.print_log("PC = " + f_manager.binary_to_string(mic1.PC) + "\n");
-        f_manager.print_log("MBR = " + f_manager.binary_to_string(mic1.MBR) + "\n");
-        f_manager.print_log("SP = " + f_manager.binary_to_string(mic1.SP) + "\n");
-        f_manager.print_log("LV = " + f_manager.binary_to_string(mic1.LV) + "\n");
-        f_manager.print_log("CPP = " + f_manager.binary_to_string(mic1.CPP) + "\n");
-        f_manager.print_log("TOS = " + f_manager.binary_to_string(mic1.TOS) + "\n");
-        f_manager.print_log("OPC = " + f_manager.binary_to_string(mic1.OPC) + "\n");
-        f_manager.print_log("H = " + f_manager.binary_to_string(mic1.H) + "\n\n");
+        f_manager.print_log("MAR = " + binary_to_string(mic1.MAR) + "\n");
+        f_manager.print_log("MDR = " + binary_to_string(mic1.MDR) + "\n");
+        f_manager.print_log("PC = " + binary_to_string(mic1.PC) + "\n");
+        f_manager.print_log("MBR = " + binary_to_string(mic1.MBR) + "\n");
+        f_manager.print_log("SP = " + binary_to_string(mic1.SP) + "\n");
+        f_manager.print_log("LV = " + binary_to_string(mic1.LV) + "\n");
+        f_manager.print_log("CPP = " + binary_to_string(mic1.CPP) + "\n");
+        f_manager.print_log("TOS = " + binary_to_string(mic1.TOS) + "\n");
+        f_manager.print_log("OPC = " + binary_to_string(mic1.OPC) + "\n");
+        f_manager.print_log("H = " + binary_to_string(mic1.H) + "\n\n");
 
         try{
-            mic1.executa_ula(inst);
-            mic1.read_or_write(inst);
+            bits_8 r_w = inst & 0b110000;
+
+            if(r_w == 0b110000){
+                mic1.fetch(inst);
+            } else{
+                mic1.executa_ula(inst);
+                mic1.read_or_write(inst);
+            }
         }catch(std::string e){
             f_manager.print_log(e + '\n');
             break;
         }   
 
         f_manager.print_log("> Registradores depois da instrucao\n");
-        f_manager.print_log("MAR = " + f_manager.binary_to_string(mic1.MAR) + "\n");
-        f_manager.print_log("MDR = " + f_manager.binary_to_string(mic1.MDR) + "\n");
-        f_manager.print_log("PC = " + f_manager.binary_to_string(mic1.PC) + "\n");
-        f_manager.print_log("MBR = " + f_manager.binary_to_string(mic1.MBR) + "\n");
-        f_manager.print_log("SP = " + f_manager.binary_to_string(mic1.SP) + "\n");
-        f_manager.print_log("LV = " + f_manager.binary_to_string(mic1.LV) + "\n");
-        f_manager.print_log("CPP = " + f_manager.binary_to_string(mic1.CPP) + "\n");
-        f_manager.print_log("TOS = " + f_manager.binary_to_string(mic1.TOS) + "\n");
-        f_manager.print_log("OPC = " + f_manager.binary_to_string(mic1.OPC) + "\n");
-        f_manager.print_log("H = " + f_manager.binary_to_string(mic1.H) + "\n\n");
+        f_manager.print_log("MAR = " + binary_to_string(mic1.MAR) + "\n");
+        f_manager.print_log("MDR = " + binary_to_string(mic1.MDR) + "\n");
+        f_manager.print_log("PC = " + binary_to_string(mic1.PC) + "\n");
+        f_manager.print_log("MBR = " + binary_to_string(mic1.MBR) + "\n");
+        f_manager.print_log("SP = " + binary_to_string(mic1.SP) + "\n");
+        f_manager.print_log("LV = " + binary_to_string(mic1.LV) + "\n");
+        f_manager.print_log("CPP = " + binary_to_string(mic1.CPP) + "\n");
+        f_manager.print_log("TOS = " + binary_to_string(mic1.TOS) + "\n");
+        f_manager.print_log("OPC = " + binary_to_string(mic1.OPC) + "\n");
+        f_manager.print_log("H = " + binary_to_string(mic1.H) + "\n\n");
 
         f_manager.print_log("> Memoria depois da instrucao\n");
         
         for(bits_32 b : mic1.memoria){
-            f_manager.print_log(f_manager.binary_to_string(b) + '\n');
+            f_manager.print_log(binary_to_string(b) + '\n');
         }
 
         f_manager.print_log("=====================================================\n");
@@ -128,6 +153,5 @@ int main() {
     }
 
     f_manager.print_log("FIM DO PROGRAMA");
-    f_manager.escrever_dados(mic1.memoria);
     f_manager.close_log_file();
 }
